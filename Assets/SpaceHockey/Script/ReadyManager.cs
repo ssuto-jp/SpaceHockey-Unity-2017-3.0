@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using SpaceHockey.Players;
 using PhotonRx;
 using UniRx;
 using UniRx.Triggers;
@@ -11,6 +12,7 @@ namespace SpaceHockey.GameManagers
     public class ReadyManager : Photon.MonoBehaviour
     {
         [SerializeField] private Text connectText;
+        [SerializeField] private Text idText;
 
         private void Start()
         {
@@ -33,7 +35,12 @@ namespace SpaceHockey.GameManagers
                 });
 
             this.OnJoinedRoomAsObservable()
-                .Subscribe(_ => Debug.Log("ルームに入室しました。"));
+                .Subscribe(_ =>
+                {
+                    PlayerId.Instance.OnInitialize();
+                    idText.text = PlayerId.Instance.Player_Id.ToString() + "P";
+                    Debug.Log("ルームに入室しました。");
+                });
 
             this.OnPhotonPlayerConnectedAsObservable()
                 .Subscribe(_ => Debug.Log("誰かがルームに入室しました。"));

@@ -20,7 +20,7 @@ using UnityEngine;
 /// </summary>
 [RequireComponent(typeof(PhotonView))]
 [AddComponentMenu("Photon Networking/Photon Transform View")]
-public class PhotonTransformView : MonoBehaviour, IPunObservable
+public class PhotonTransformView : MonoBehaviour, IObservable
 {
     //Since this component is very complex, we seperated it into multiple objects.
     //The PositionModel, RotationModel and ScaleMode store the data you are able to

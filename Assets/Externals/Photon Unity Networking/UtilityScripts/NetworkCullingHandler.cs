@@ -5,7 +5,7 @@ using UnityEngine;
 ///     Handles the network culling.
 /// </summary>
 [RequireComponent(typeof(PhotonView))]
-public class NetworkCullingHandler : MonoBehaviour, IPunObservable
+public class NetworkCullingHandler : MonoBehaviour, IObservable
 {
     #region VARIABLES
 

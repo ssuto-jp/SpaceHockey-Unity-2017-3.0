@@ -526,7 +526,7 @@ public class PhotonView : Photon.MonoBehaviour
 
     protected internal void ExecuteComponentOnSerialize(Component component, PhotonStream stream, PhotonMessageInfo info)
     {
-        IPunObservable observable = component as IPunObservable;
+        IObservable observable = component as IObservable;
         if (observable != null)
         {
             observable.OnPhotonSerializeView(stream, info);

@@ -35,7 +35,7 @@ using SupportClassPun = ExitGames.Client.Photon.SupportClass;
 
 /// <summary>Defines the OnPhotonSerializeView method to make it easy to implement correctly for observable scripts.</summary>
 /// \ingroup publicApi
-public interface IPunObservable
+public interface IObservable
 {
     /// <summary>
     /// Called by PUN several times per second, so that your script can write and read synchronization data for the PhotonView.

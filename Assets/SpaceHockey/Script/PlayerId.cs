@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using UniRx;
 using UnityEngine;
 
 namespace SpaceHockey.Players
@@ -8,15 +8,21 @@ namespace SpaceHockey.Players
     {
         public static PlayerId Instance;
         public int Player_Id { get; private set; }
+        public IObservable<int> OnInitializeAsync { get { return _onInitializeAsyncSubject; } }
+        private readonly AsyncSubject<int> _onInitializeAsyncSubject = new AsyncSubject<int>();
+
 
         private void Awake()
         {
             Instance = this;
         }
 
-        public void OnInitialize()
+        public void InitializePlayer()
         {
             Player_Id = PhotonNetwork.player.ID;
+            _onInitializeAsyncSubject.OnNext(Player_Id);
+            _onInitializeAsyncSubject.OnCompleted();
         }
+
     }
 }

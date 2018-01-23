@@ -15,5 +15,4 @@ namespace SpaceHockey.Players
 
         protected abstract void OnInitialize();
     }
-
 }

@@ -22,7 +22,18 @@ namespace SpaceHockey.Players
             Player_Id = PhotonNetwork.player.ID;
             _onInitializeAsyncSubject.OnNext(Player_Id);
             _onInitializeAsyncSubject.OnCompleted();
-        }
 
+            switch (Player_Id)
+            {
+                case 1:
+                    PhotonNetwork.Instantiate("1P_Racket", new Vector3(0, 3, 18), this.transform.rotation, 0);
+                    break;
+                case 2:
+                    PhotonNetwork.Instantiate("2P_Racket", new Vector3(0, 3, -18), this.transform.rotation, 0);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

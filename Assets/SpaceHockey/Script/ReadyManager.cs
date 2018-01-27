@@ -9,12 +9,12 @@ using UnityEngine.UI;
 
 namespace SpaceHockey.GameManagers
 {
-    public class ReadyManager : Photon.MonoBehaviour
+    public class ReadyManager : MonoBehaviour
     {
         [SerializeField] private Text connectText;
         [SerializeField] private Text idText;
 
-        private void Start()
+        public void ConnectNetwork()
         {
             PhotonNetwork.ConnectUsingSettings("1.0");
 
@@ -42,11 +42,9 @@ namespace SpaceHockey.GameManagers
                     Debug.Log("ルームに入室しました。");
                 });
 
-            this.OnPhotonPlayerConnectedAsObservable()
-                .Subscribe(_ => Debug.Log("誰かがルームに入室しました。"));
-
+            //デバッグ用
             this.UpdateAsObservable()
-                .Subscribe(_ => connectText.text = PhotonNetwork.connectionStateDetailed.ToString());
+                 .Subscribe(_ => connectText.text = PhotonNetwork.connectionStateDetailed.ToString());
         }
     }
 }

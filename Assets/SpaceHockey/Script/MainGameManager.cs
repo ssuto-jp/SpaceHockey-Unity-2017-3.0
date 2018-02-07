@@ -9,6 +9,7 @@ namespace SpaceHockey.GameManagers
     public class MainGameManager : Photon.MonoBehaviour, IGameStateProvider
     {
         private ReadyManager readyManager;
+        private BattleManager battleManager;
 
         private GameStateReactiveProperty _currentGameState = new GameStateReactiveProperty(GameState.Ready);
         public IReadOnlyReactiveProperty<GameState> CurrentGameState
@@ -22,6 +23,7 @@ namespace SpaceHockey.GameManagers
         private void Start()
         {
             readyManager = GetComponent<ReadyManager>();
+            battleManager = GetComponent<BattleManager>();
 
             CurrentGameState
                 .Subscribe(state => OnStateChanged(state));
@@ -61,7 +63,7 @@ namespace SpaceHockey.GameManagers
 
         private void OnBattle()
         {
-            //
+            battleManager.StartBattle();
         }
 
         private void OnResult()

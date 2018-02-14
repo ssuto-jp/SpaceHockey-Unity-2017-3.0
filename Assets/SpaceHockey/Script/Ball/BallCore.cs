@@ -19,6 +19,12 @@ namespace SpaceHockey.Balls
         {           
             rb.velocity = (Vector3.forward + Vector3.left) * ballSpeed;
         }
+
+        public void SetBall(Vector3 respawn)
+        {
+            rb.velocity = Vector3.zero;
+            transform.position = respawn;
+        }
     }
 }
 

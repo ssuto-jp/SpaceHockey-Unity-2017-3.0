@@ -26,10 +26,10 @@ namespace SpaceHockey.Players
             switch (Player_Id)
             {
                 case 1:
-                    PhotonNetwork.Instantiate("1P_Racket", new Vector3(0, 1, 18), this.transform.rotation, 0);
+                    PhotonNetwork.Instantiate("1P_Racket", new Vector3(0, 1, 20), this.transform.rotation, 0);
                     break;
                 case 2:
-                    PhotonNetwork.Instantiate("2P_Racket", new Vector3(0, 1, -18), this.transform.rotation, 0);
+                    PhotonNetwork.Instantiate("2P_Racket", new Vector3(0, 1, -20), this.transform.rotation, 0);
                     break;
                 default:
                     break;

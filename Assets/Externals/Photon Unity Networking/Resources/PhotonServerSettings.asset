@@ -37,4 +37,5 @@ MonoBehaviour:
   - RequestForPickupItems
   - RequestForPickupTimes
   - BattleCoroutine
+  - ChangeColor
   DisableAutoOpenWizard: 1

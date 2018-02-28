@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using SpaceHockey.Balls;
+﻿using SpaceHockey.Balls;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -17,8 +14,19 @@ namespace SpaceHockey.GameManagers
         [SerializeField] private GameObject respawnPoint;
         [SerializeField] private Text scoreText;
 
-        private BoolReactiveProperty IsBallSet = new BoolReactiveProperty(false);
         private IntReactiveProperty[] _score;
+
+        private BoolReactiveProperty _isBallSet = new BoolReactiveProperty(false);
+        public IReadOnlyReactiveProperty<bool> IsBallSet
+        {
+            get { return _isBallSet; }
+        }
+
+        private FloatReactiveProperty _currentTime = new FloatReactiveProperty(0);
+        public IReadOnlyReactiveProperty<float> CurrentTime
+        {
+            get { return _currentTime; }
+        }
 
         private void Start()
         {
@@ -31,44 +39,54 @@ namespace SpaceHockey.GameManagers
                 _score[i] = new IntReactiveProperty(0);
             }
 
+            //プレイ開始時の処理
             IsBallSet
                 .Where(b => b == true)
-                .Delay(TimeSpan.FromSeconds(3))
                 .Subscribe(_ =>
                 {
                     ballCore.ShootBall();
-                    IsBallSet.Value = false;
+                    _isBallSet.Value = false;
                 });
 
-
+            //ゴールに入れた時の処理  
             this.goal[0].OnTriggerEnterAsObservable()
                 .Where(collider => collider.tag == "Ball")
                 .Subscribe(_ =>
                 {
-                    Debug.Log("goal1");
                     _score[1].Value++;
+                    _currentTime.Value = 0;
                     ballCore.SetBall(r);
-                    IsBallSet.Value = true;
+                    _isBallSet.Value = true;
                 });
-
 
             this.goal[1].OnTriggerEnterAsObservable()
                  .Where(collider => collider.tag == "Ball")
                  .Subscribe(_ =>
                  {
-                     Debug.Log("goal2");
                      _score[0].Value++;
+                     _currentTime.Value = 0;
                      ballCore.SetBall(r);
-                     IsBallSet.Value = true;
+                     _isBallSet.Value = true;
                  });
 
+            //得点を表示
             _score[0].Merge(_score[1])
                  .Subscribe(_ => scoreText.text = $"{_score[0]} - {_score[1]}");
+           
+            this.UpdateAsObservable()
+                .Where(_ => IsBallSet.Value == false)
+                .Subscribe(_ =>
+                {
+                    _currentTime.Value += Time.deltaTime;
+                    Debug.Log(_currentTime.Value);
+                });
         }
 
+        //初期化
         public void StartBattle()
         {
-            IsBallSet.Value = true;
+            _currentTime.Value = 0;
+            _isBallSet.Value = true;
         }
 
         private void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -81,7 +99,7 @@ namespace SpaceHockey.GameManagers
             }
             else
             {
-                IsBallSet.Value = (bool)stream.ReceiveNext();
+                _isBallSet.Value = (bool)stream.ReceiveNext();
                 _score[0].Value = (int)stream.ReceiveNext();
                 _score[1].Value = (int)stream.ReceiveNext();
             }

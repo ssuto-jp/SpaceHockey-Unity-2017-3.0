@@ -8,7 +8,7 @@ namespace SpaceHockey.GameManagers
 {
     public class BattleManager : Photon.MonoBehaviour
     {
-        private BallCore ballCore;
+        private Ball ballScript;
         public GameObject ball;
         [SerializeField] private GameObject[] goal = new GameObject[2];
         [SerializeField] private GameObject respawnPoint;
@@ -30,7 +30,7 @@ namespace SpaceHockey.GameManagers
 
         private void Start()
         {
-            ballCore = ball.GetComponent<BallCore>();
+            ballScript = ball.GetComponent<Ball>();
             var r = respawnPoint.transform.position;
 
             _score = new IntReactiveProperty[2];
@@ -44,7 +44,7 @@ namespace SpaceHockey.GameManagers
                 .Where(b => b == true)
                 .Subscribe(_ =>
                 {
-                    ballCore.ShootBall();
+                    ballScript.ShootBall();
                     _isBallSet.Value = false;
                 });
 
@@ -55,8 +55,8 @@ namespace SpaceHockey.GameManagers
                 {
                     _score[1].Value++;
                     _currentTime.Value = 0;
-                    ballCore.SetBall(r);
-                    _isBallSet.Value = true;
+                    ballScript.SetBall(r);
+                    _isBallSet.Value = true;                   
                 });
 
             this.goal[1].OnTriggerEnterAsObservable()
@@ -65,8 +65,8 @@ namespace SpaceHockey.GameManagers
                  {
                      _score[0].Value++;
                      _currentTime.Value = 0;
-                     ballCore.SetBall(r);
-                     _isBallSet.Value = true;
+                     ballScript.SetBall(r);
+                     _isBallSet.Value = true;                     
                  });
 
             //得点を表示
@@ -78,7 +78,7 @@ namespace SpaceHockey.GameManagers
                 .Subscribe(_ =>
                 {
                     _currentTime.Value += Time.deltaTime;
-                    Debug.Log(_currentTime.Value);
+                    //Debug.Log(_currentTime.Value);
                 });
         }
 

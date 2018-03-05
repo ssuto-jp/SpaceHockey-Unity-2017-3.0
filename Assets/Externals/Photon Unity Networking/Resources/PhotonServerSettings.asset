@@ -38,4 +38,10 @@ MonoBehaviour:
   - RequestForPickupTimes
   - BattleCoroutine
   - ChangeColor
+  - ChangeStageColor
+  - ChangeStage
+  - Test
+  - Change
+  - ChangeBallState
+  - FetchChangedColor
   DisableAutoOpenWizard: 1

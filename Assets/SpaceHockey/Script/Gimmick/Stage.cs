@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SpaceHockey.Balls;
 using SpaceHockey.GameManagers;
 using UniRx;
 using UnityEngine;
@@ -7,13 +8,21 @@ namespace SpaceHockey.Gimmicks
 {
     public class Stage : MonoBehaviour
     {
-        private Material m;
         private BattleManager battleManager;
-        private PhotonView photonView;
+        private Ball ballScript;
+        private PhotonView photonView;      
+        private Renderer r;
+        public GameObject ballPrefab;
         public GameObject wallPrefab;
         public GameObject gameManager;
         private bool isChangeColor;
-        private readonly List<Color> stageColor = new List<Color>() { Color.white, Color.red, Color.blue, Color.yellow };
+        private readonly List<Color> stageColor = new List<Color>()
+        {
+            Color.white,
+            Color.red,
+            Color.blue,
+            Color.yellow
+        };
 
         private void Awake()
         {
@@ -23,14 +32,16 @@ namespace SpaceHockey.Gimmicks
         private void Start()
         {
             battleManager = gameManager.GetComponent<BattleManager>();
-            photonView = GetComponent<PhotonView>();
-            m = wallPrefab.GetComponent<Renderer>().sharedMaterial;
+            ballScript = ballPrefab.GetComponent<Ball>();
+            photonView = GetComponent<PhotonView>();            
+            r = wallPrefab.GetComponent<Renderer>();
+
 
             battleManager.IsBallSet
                 .Where(b => b == true)
                 .Subscribe(_ =>
                 {
-                    photonView.RPC("ChangeColor", PhotonTargets.All, stageColor[0]);
+                    photonView.RPC("ChangeStageColor", PhotonTargets.All, stageColor[0]);
                     isChangeColor = false;
                 });
 
@@ -40,17 +51,19 @@ namespace SpaceHockey.Gimmicks
                 {
                     if (isChangeColor == false)
                     {
-                        photonView.RPC("ChangeColor", PhotonTargets.All, stageColor[Random.Range(1, 4)]);
+                        photonView.RPC("ChangeStageColor", PhotonTargets.All, stageColor[Random.Range(1, 4)]);
                         isChangeColor = true;
                     }
                 });
         }
-
+        
         [PunRPC]
-        private void ChangeColor(Color color)
+        private void ChangeStageColor(Color color)
         {
-            m.EnableKeyword("_EMISSION");
-            m.SetColor("_EmissionColor", color);
+            r.sharedMaterial.EnableKeyword("_EMISSION");           
+            r.sharedMaterial.SetColor("_EmissionColor", color);
+                        
+            ballScript.FetchChangedColor(color);
         }
     }
 }

@@ -14,7 +14,8 @@ namespace SpaceHockey.GameManagers
         [SerializeField] private GameObject respawnPoint;
         [SerializeField] private Text scoreText;
 
-        private IntReactiveProperty[] _score;
+        public IntReactiveProperty[] _score;
+        public int finalScore { get; private set; } = 1;
 
         private BoolReactiveProperty _isBallSet = new BoolReactiveProperty(false);
         public IReadOnlyReactiveProperty<bool> IsBallSet
@@ -56,7 +57,7 @@ namespace SpaceHockey.GameManagers
                     _score[1].Value++;
                     _currentTime.Value = 0;
                     ballScript.SetBall(r);
-                    _isBallSet.Value = true;                   
+                    _isBallSet.Value = true;
                 });
 
             this.goal[1].OnTriggerEnterAsObservable()
@@ -66,19 +67,18 @@ namespace SpaceHockey.GameManagers
                      _score[0].Value++;
                      _currentTime.Value = 0;
                      ballScript.SetBall(r);
-                     _isBallSet.Value = true;                     
+                     _isBallSet.Value = true;
                  });
 
             //得点を表示
             _score[0].Merge(_score[1])
                  .Subscribe(_ => scoreText.text = $"{_score[0]} - {_score[1]}");
-           
+
             this.UpdateAsObservable()
                 .Where(_ => IsBallSet.Value == false)
                 .Subscribe(_ =>
                 {
                     _currentTime.Value += Time.deltaTime;
-                    //Debug.Log(_currentTime.Value);
                 });
         }
 

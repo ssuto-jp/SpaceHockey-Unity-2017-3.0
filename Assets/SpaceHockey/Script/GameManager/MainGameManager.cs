@@ -6,24 +6,26 @@ using UnityEngine;
 
 namespace SpaceHockey.GameManagers
 {
+    [RequireComponent(typeof(ReadyManager))]
+    [RequireComponent(typeof(BattleManager))]
+    [RequireComponent(typeof(ResultManager))]
     public class MainGameManager : Photon.MonoBehaviour, IGameStateProvider
     {
         private ReadyManager readyManager;
         private BattleManager battleManager;
+        private ResultManager resultManager;
 
         private GameStateReactiveProperty _currentGameState = new GameStateReactiveProperty(GameState.Ready);
         public IReadOnlyReactiveProperty<GameState> CurrentGameState
         {
-            get
-            {
-                return _currentGameState;
-            }
+            get { return _currentGameState; }
         }
 
         private void Start()
         {
             readyManager = GetComponent<ReadyManager>();
             battleManager = GetComponent<BattleManager>();
+            resultManager = GetComponent<ResultManager>();
 
             CurrentGameState
                 .Subscribe(state => OnStateChanged(state));
@@ -34,15 +36,13 @@ namespace SpaceHockey.GameManagers
             switch (gameState)
             {
                 case GameState.Ready:
-                    Debug.Log("Ready");
                     OnReady();
                     break;
                 case GameState.Battle:
-                    Debug.Log("Battle");
                     OnBattle();
                     break;
                 case GameState.Result:
-                    Debug.Log("Result");
+                    OnResult();
                     break;
                 default:
                     break;
@@ -64,11 +64,14 @@ namespace SpaceHockey.GameManagers
         private void OnBattle()
         {
             battleManager.StartBattle();
+            battleManager._score[0].Merge(battleManager._score[1])
+                .Where(score => score == battleManager.finalScore)
+                .Subscribe(_ => _currentGameState.Value = GameState.Result);
         }
 
         private void OnResult()
         {
-            //
+            resultManager.StartResult();
         }
     }
 }

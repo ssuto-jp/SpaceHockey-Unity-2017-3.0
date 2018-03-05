@@ -44,4 +44,5 @@ MonoBehaviour:
   - Change
   - ChangeBallState
   - FetchChangedColor
+  - StartResult
   DisableAutoOpenWizard: 1

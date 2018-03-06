@@ -3,6 +3,7 @@ using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace SpaceHockey.GameManagers
 {
@@ -12,6 +13,7 @@ namespace SpaceHockey.GameManagers
         private bool isDisplay = false;
         [SerializeField] private GameObject resultPanel;
         [SerializeField] private Text resultText;
+        [SerializeField] private Button titleButton;
 
         private void Start()
         {
@@ -25,6 +27,10 @@ namespace SpaceHockey.GameManagers
                         DisplayResult();
                     }
                 });
+
+            titleButton.OnClickAsObservable()
+                .First()
+                .Subscribe(_ => SceneManager.LoadScene("Title"));
         }
 
         public void StartResult()
@@ -32,6 +38,7 @@ namespace SpaceHockey.GameManagers
             isDisplay = true;
         }
 
+        [PunRPC]
         private void DisplayResult()
         {
             resultPanel.SetActive(true);

@@ -4,4 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/SpaceHockey/Scene/Title.unity
+    guid: e8a3663f9459fce45a704702ab4872ca
+  - enabled: 1
+    path: Assets/SpaceHockey/Scene/Main.unity
+    guid: a77ea3d7dc8a60f4a9a18438a6cb5bdf

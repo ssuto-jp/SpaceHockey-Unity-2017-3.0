@@ -9,6 +9,7 @@ namespace SpaceHockey.GameManagers
 {
     public class ResultManager : MonoBehaviour
     {
+        private PhotonView photon;
         private BattleManager battleManager;
         private bool isDisplay = false;
         [SerializeField] private GameObject resultPanel;
@@ -17,6 +18,7 @@ namespace SpaceHockey.GameManagers
 
         private void Start()
         {
+            photon = GetComponent<PhotonView>();
             battleManager = GetComponent<BattleManager>();
 
             this.UpdateAsObservable()
@@ -24,7 +26,7 @@ namespace SpaceHockey.GameManagers
                 {
                     if (isDisplay == true)
                     {
-                        DisplayResult();
+                        photon.RPC("DisplayResult", PhotonTargets.All);
                     }
                 });
 
@@ -46,17 +48,17 @@ namespace SpaceHockey.GameManagers
 
             if (battleManager._score[0].Value == battleManager.finalScore && PlayerId.Instance.Player_Id == 1)
             {
-                resultText.text = "Win";
+                resultText.text = "WIN";
                 resultText.color = Color.red;
             }
             else if (battleManager._score[1].Value == battleManager.finalScore && PlayerId.Instance.Player_Id == 2)
             {
-                resultText.text = "Win";
+                resultText.text = "WIN";
                 resultText.color = Color.red;
             }
             else
             {
-                resultText.text = "Lose";
+                resultText.text = "LOSE";
                 resultText.color = Color.blue;
             }
         }

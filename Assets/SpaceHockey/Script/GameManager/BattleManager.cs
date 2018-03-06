@@ -8,10 +8,12 @@ namespace SpaceHockey.GameManagers
 {
     public class BattleManager : Photon.MonoBehaviour
     {
+        private PhotonView photon;
         private Ball ballScript;
         public GameObject ball;
         [SerializeField] private GameObject[] goal = new GameObject[2];
         [SerializeField] private GameObject respawnPoint;
+        [SerializeField] private GameObject battlePanel;
         [SerializeField] private Text scoreText;
 
         public IntReactiveProperty[] _score;
@@ -31,6 +33,7 @@ namespace SpaceHockey.GameManagers
 
         private void Start()
         {
+            photon = GetComponent<PhotonView>();
             ballScript = ball.GetComponent<Ball>();
             var r = respawnPoint.transform.position;
 
@@ -87,6 +90,13 @@ namespace SpaceHockey.GameManagers
         {
             _currentTime.Value = 0;
             _isBallSet.Value = true;
+            photon.RPC("DisplayBattlePanel", PhotonTargets.All);
+        }
+
+        [PunRPC]
+        private void DisplayBattlePanel()
+        {
+            battlePanel.SetActive(true);
         }
 
         private void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

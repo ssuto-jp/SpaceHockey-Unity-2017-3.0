@@ -26,7 +26,7 @@ namespace SpaceHockey.GameManagers
                 {
                     if (isDisplay == true)
                     {
-                        photon.RPC("DisplayResult", PhotonTargets.All);
+                        photon.RPC("DisplayResult", PhotonTargets.All);                       
                     }
                 });
 

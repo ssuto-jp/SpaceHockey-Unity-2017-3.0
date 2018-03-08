@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/SpaceHockey/Scene/Title.unity
     guid: e8a3663f9459fce45a704702ab4872ca
   - enabled: 1

@@ -46,7 +46,7 @@ namespace SpaceHockey.Gimmicks
                 });
 
             battleManager.CurrentTime
-                .Where(t => t > 10)
+                .Where(t => t > 6)
                 .Subscribe(_ =>
                 {
                     if (isChangeColor == false)

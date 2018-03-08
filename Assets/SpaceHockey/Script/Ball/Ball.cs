@@ -8,7 +8,9 @@ namespace SpaceHockey.Balls
     [RequireComponent(typeof(Rigidbody))]
     public class Ball : MonoBehaviour
     {
+        private PhotonView photon;
         private Rigidbody rb;
+        private Renderer rend;
         private float initialSpeed = 10f;
         private float accele = 40;
         private Color changedColor;
@@ -16,9 +18,11 @@ namespace SpaceHockey.Balls
 
         private void Start()
         {
+            photon = GetComponent<PhotonView>();
             rb = GetComponent<Rigidbody>();
+            rend = GetComponent<Renderer>();
             originalScale = transform.localScale;
-            
+
             this.OnCollisionEnterAsObservable()
                 .Subscribe(collision =>
                 {
@@ -26,7 +30,7 @@ namespace SpaceHockey.Balls
 
                     if (collision.gameObject.CompareTag("Wall"))
                     {
-                        ChangeBallState(changedColor);
+                        photon.RPC("ChangeBallState", PhotonTargets.All, changedColor);
                     }
                 });
         }
@@ -39,6 +43,9 @@ namespace SpaceHockey.Balls
         public void SetBall(Vector3 respawn)
         {
             rb.velocity = Vector3.zero;
+            transform.localScale = originalScale;
+            rend.enabled = true;
+
             transform.position = respawn;
         }
 
@@ -53,7 +60,7 @@ namespace SpaceHockey.Balls
         {
             if (color == Color.white)
             {
-                transform.localScale = originalScale;
+                Debug.Log("white");
             }
             else if (color == Color.red)
             {
@@ -76,18 +83,17 @@ namespace SpaceHockey.Balls
         //ボールを加速させる
         private void AccelerateBall()
         {
-            rb.velocity = rb.velocity.normalized * 60;
+            rb.velocity = rb.velocity.normalized * 70;
         }
 
         //ボールを点滅させる
         private IEnumerator BlinkCoroutine()
         {
-            var renderer = GetComponent<Renderer>();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 3; i++)
             {
-                renderer.enabled = !renderer.enabled;
+                rend.enabled = !rend.enabled;
 
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.1f);
             }
         }
 

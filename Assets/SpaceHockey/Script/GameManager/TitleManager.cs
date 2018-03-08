@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UniRx;
+﻿using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -15,8 +13,8 @@ namespace SpaceHockey.GameManagers
         {
             startButton.OnClickAsObservable()
                 .First()
-                .Subscribe(_ => SceneManager.LoadScene("Main"));                
-        }       
+                .Subscribe(_ => SceneManager.LoadScene("Main"));
+        }
     }
 }
 

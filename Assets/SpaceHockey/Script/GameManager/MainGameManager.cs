@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using PhotonRx;
+﻿using PhotonRx;
 using UniRx;
 using UnityEngine;
 
@@ -13,7 +11,7 @@ namespace SpaceHockey.GameManagers
     {
         private ReadyManager readyManager;
         private BattleManager battleManager;
-        private ResultManager resultManager;       
+        private ResultManager resultManager;
 
         private GameStateReactiveProperty _currentGameState = new GameStateReactiveProperty(GameState.Ready);
         public IReadOnlyReactiveProperty<GameState> CurrentGameState
@@ -25,7 +23,7 @@ namespace SpaceHockey.GameManagers
         {
             readyManager = GetComponent<ReadyManager>();
             battleManager = GetComponent<BattleManager>();
-            resultManager = GetComponent<ResultManager>();          
+            resultManager = GetComponent<ResultManager>();
 
             CurrentGameState
                 .Subscribe(state => OnStateChanged(state));

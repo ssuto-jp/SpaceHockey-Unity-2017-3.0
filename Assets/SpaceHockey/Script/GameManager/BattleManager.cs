@@ -17,7 +17,7 @@ namespace SpaceHockey.GameManagers
         [SerializeField] private Text scoreText;
 
         public IntReactiveProperty[] _score;
-        public int finalScore { get; private set; } = 1;
+        public int finalScore { get; private set; } = 6;
 
         private BoolReactiveProperty _isBallSet = new BoolReactiveProperty(false);
         public IReadOnlyReactiveProperty<bool> IsBallSet

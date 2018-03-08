@@ -26,7 +26,7 @@ namespace SpaceHockey.GameManagers
                 {
                     if (isDisplay == true)
                     {
-                        photon.RPC("DisplayResult", PhotonTargets.All);                       
+                        photon.RPC("DisplayResult", PhotonTargets.All);
                     }
                 });
 
@@ -60,18 +60,6 @@ namespace SpaceHockey.GameManagers
             {
                 resultText.text = "LOSE";
                 resultText.color = Color.blue;
-            }
-        }
-
-        private void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        {
-            if (stream.isWriting)
-            {
-                stream.SendNext(isDisplay);
-            }
-            else
-            {
-                isDisplay = (bool)stream.ReceiveNext();
             }
         }
     }

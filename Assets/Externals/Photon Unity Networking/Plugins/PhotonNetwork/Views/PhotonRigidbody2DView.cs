@@ -23,7 +23,7 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 [RequireComponent(typeof(Rigidbody2D))]
 [AddComponentMenu("Photon Networking/Photon Rigidbody 2D View")]
-public class PhotonRigidbody2DView : MonoBehaviour, IObservable
+public class PhotonRigidbody2DView : MonoBehaviour, IPunObservable
 {
     [SerializeField]
     bool m_SynchronizeVelocity = true;

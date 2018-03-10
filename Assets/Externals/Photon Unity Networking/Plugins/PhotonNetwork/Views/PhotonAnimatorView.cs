@@ -23,7 +23,7 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(PhotonView))]
 [AddComponentMenu("Photon Networking/Photon Animator View")]
-public class PhotonAnimatorView : MonoBehaviour, IObservable
+public class PhotonAnimatorView : MonoBehaviour, IPunObservable
 {
     #region Enums
 

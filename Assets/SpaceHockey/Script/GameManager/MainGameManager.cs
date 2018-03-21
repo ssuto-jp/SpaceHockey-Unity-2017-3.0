@@ -62,9 +62,11 @@ namespace SpaceHockey.GameManagers
 
         private void OnBattle()
         {
-            battleManager.StartBattle();
-            battleManager._score[0].Merge(battleManager._score[1])
-                .Where(score => score == battleManager.finalScore)
+            StartCoroutine(battleManager.BattleCoroutine());
+            GetComponent<PhotonView>().RPC("DisplayBattlePanel", PhotonTargets.AllViaServer);
+            battleManager.IsWinner
+                .SkipWhile(b => b != true)
+                .DistinctUntilChanged()
                 .Subscribe(_ => _currentGameState.Value = GameState.Result);
         }
 

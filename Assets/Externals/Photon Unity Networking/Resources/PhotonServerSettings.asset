@@ -49,4 +49,6 @@ MonoBehaviour:
   - FinishedLoading
   - HiddenReadyPanel
   - DisplayBattlePanel
+  - ShootBall
+  - ShowBattlePanel
   DisableAutoOpenWizard: 1

@@ -1,4 +1,4 @@
-﻿using SpaceHockey.Balls;
+﻿using System.Collections;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -6,95 +6,111 @@ using UnityEngine.UI;
 
 namespace SpaceHockey.GameManagers
 {
-    public class BattleManager : Photon.MonoBehaviour
+    public class BattleManager : MonoBehaviour
     {
-        private PhotonView photon;
-        private Ball ballScript;
-        public GameObject ball;
         [SerializeField] private GameObject[] goal = new GameObject[2];
-        [SerializeField] private GameObject respawnPoint;
+        [SerializeField] private Transform respawnPoint;
         [SerializeField] private GameObject battlePanel;
         [SerializeField] private Text scoreText;
 
-        public IntReactiveProperty[] _score;
-        public int finalScore { get; private set; } = 6;
+        private GameObject ball;
+        private bool isEnteringGoal;
 
-        private BoolReactiveProperty _isBallSet = new BoolReactiveProperty(false);
-        public IReadOnlyReactiveProperty<bool> IsBallSet
+        public int MaxScore { get; } = 3;
+        public IntReactiveProperty[] _score = new IntReactiveProperty[2];
+
+        private BoolReactiveProperty _isWinner = new BoolReactiveProperty(false);
+        public IReadOnlyReactiveProperty<bool> IsWinner
         {
-            get { return _isBallSet; }
+            get { return _isWinner; }
         }
 
-        private FloatReactiveProperty _currentTime = new FloatReactiveProperty(0);
-        public IReadOnlyReactiveProperty<float> CurrentTime
+        private void Awake()
         {
-            get { return _currentTime; }
-        }
-
-        private void Start()
-        {
-            photon = GetComponent<PhotonView>();
-            ballScript = ball.GetComponent<Ball>();
-            var r = respawnPoint.transform.position;
-
-            _score = new IntReactiveProperty[2];
             for (var i = 0; i < 2; i++)
             {
                 _score[i] = new IntReactiveProperty(0);
             }
+        }
 
-            //プレイ開始時の処理
-            IsBallSet
-                .Where(b => b == true)
-                .Subscribe(_ =>
-                {
-                    ballScript.ShootBall();
-                    _isBallSet.Value = false;
-                });
-
-            //ゴールに入れた時の処理  
+        private void Start()
+        {
+            //ゴールに入ったら得点を増やす
             this.goal[0].OnTriggerEnterAsObservable()
-                .Where(collider => collider.tag == "Ball")
-                .Subscribe(_ =>
+                .Where(other => other.tag == "Ball")
+                .Subscribe(other =>
                 {
-                    _score[1].Value++;
-                    _currentTime.Value = 0;
-                    ballScript.SetBall(r);
-                    _isBallSet.Value = true;
+                    isEnteringGoal = true;
+                    ++_score[1].Value;
                 });
 
             this.goal[1].OnTriggerEnterAsObservable()
-                 .Where(collider => collider.tag == "Ball")
-                 .Subscribe(_ =>
-                 {
-                     _score[0].Value++;
-                     _currentTime.Value = 0;
-                     ballScript.SetBall(r);
-                     _isBallSet.Value = true;
-                 });
+                .Where(other => other.tag == "Ball")
+                .Subscribe(other =>
+                {
+                    isEnteringGoal = true;
+                    ++_score[0].Value;
+                });
 
             //得点を表示
             _score[0].Merge(_score[1])
-                 .Subscribe(_ => scoreText.text = $"{_score[0]} - {_score[1]}");
-
-            this.UpdateAsObservable()
-                .Where(_ => IsBallSet.Value == false)
-                .Subscribe(_ =>
+                .TakeWhile(score => score <= MaxScore)
+                .Subscribe(score =>
                 {
-                    _currentTime.Value += Time.deltaTime;
+                    scoreText.text = $"{_score[0]} - {_score[1]}";
+                    if (score == MaxScore)
+                    {
+                        _isWinner.Value = true;
+                    }
                 });
         }
 
-        //初期化
-        public void StartBattle()
+        public IEnumerator BattleCoroutine()
         {
-            _currentTime.Value = 0;
-            _isBallSet.Value = true;
-            photon.RPC("DisplayBattlePanel", PhotonTargets.All);
+            yield return StartCoroutine(RoundStarting());
+
+            yield return StartCoroutine(RoundPlaying());
+
+            yield return StartCoroutine(RoundEnding());
+
+            if (!IsWinner.Value)
+            {
+                StartCoroutine(BattleCoroutine());
+            }
+        }
+
+        private IEnumerator RoundStarting()
+        {
+            //
+
+            yield return new WaitForSeconds(1);
+        }
+
+        private IEnumerator RoundPlaying()
+        {
+            ball = PhotonNetwork.Instantiate("Ball", respawnPoint.transform.position, Quaternion.identity, 0);
+            ball.GetComponent<PhotonView>().RPC("ShootBall", PhotonTargets.AllViaServer);
+
+            while (!isEnteringGoal)
+            {
+                yield return null;
+            }
+        }
+
+
+        private IEnumerator RoundEnding()
+        {
+            if (isEnteringGoal)
+            {
+                PhotonNetwork.Destroy(ball);
+                isEnteringGoal = false;
+            }
+
+            yield return new WaitForSeconds(1);
         }
 
         [PunRPC]
-        private void DisplayBattlePanel()
+        public void DisplayBattlePanel()
         {
             battlePanel.SetActive(true);
         }
@@ -103,13 +119,11 @@ namespace SpaceHockey.GameManagers
         {
             if (stream.isWriting)
             {
-                stream.SendNext(IsBallSet.Value);
                 stream.SendNext(_score[0].Value);
                 stream.SendNext(_score[1].Value);
             }
             else
             {
-                _isBallSet.Value = (bool)stream.ReceiveNext();
                 _score[0].Value = (int)stream.ReceiveNext();
                 _score[1].Value = (int)stream.ReceiveNext();
             }

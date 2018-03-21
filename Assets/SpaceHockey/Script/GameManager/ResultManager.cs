@@ -26,7 +26,7 @@ namespace SpaceHockey.GameManagers
                 {
                     if (isDisplay == true)
                     {
-                        photon.RPC("DisplayResult", PhotonTargets.All);
+                        photon.RPC("DisplayResult", PhotonTargets.AllViaServer);
                     }
                 });
 
@@ -46,12 +46,12 @@ namespace SpaceHockey.GameManagers
             resultPanel.SetActive(true);
             isDisplay = false;
 
-            if (battleManager._score[0].Value == battleManager.finalScore && PlayerId.Instance.Player_Id == 1)
+            if (battleManager._score[0].Value == battleManager.MaxScore && PlayerId.Instance.Player_Id == 1)
             {
                 resultText.text = "WIN";
                 resultText.color = Color.red;
             }
-            else if (battleManager._score[1].Value == battleManager.finalScore && PlayerId.Instance.Player_Id == 2)
+            else if (battleManager._score[1].Value == battleManager.MaxScore && PlayerId.Instance.Player_Id == 2)
             {
                 resultText.text = "WIN";
                 resultText.color = Color.red;

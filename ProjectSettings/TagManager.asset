@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Ball
   - Wall
+  - Ground
+  - Fire
+  - Landing
   layers:
   - Default
   - TransparentFX
@@ -15,9 +18,9 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
+  - Meteor
+  - Ball
+  - Explosion
   - 
   - 
   - 

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using SpaceHockey.Gimmicks;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -8,11 +9,13 @@ namespace SpaceHockey.GameManagers
 {
     public class BattleManager : MonoBehaviour
     {
+        [SerializeField] private GameObject stageObject;
         [SerializeField] private GameObject[] goal = new GameObject[2];
-        [SerializeField] private Transform respawnPoint;
+        [SerializeField] private Transform ballSpawnPos;
         [SerializeField] private GameObject battlePanel;
         [SerializeField] private Text scoreText;
 
+        private StageManager stageManager;
         private GameObject ball;
         private bool isEnteringGoal;
 
@@ -35,6 +38,8 @@ namespace SpaceHockey.GameManagers
 
         private void Start()
         {
+            stageManager = stageObject.GetComponent<StageManager>();
+
             //ゴールに入ったら得点を増やす
             this.goal[0].OnTriggerEnterAsObservable()
                 .Where(other => other.tag == "Ball")
@@ -81,15 +86,19 @@ namespace SpaceHockey.GameManagers
 
         private IEnumerator RoundStarting()
         {
-            //
+            stageManager.ResetStage();
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(2);
         }
 
         private IEnumerator RoundPlaying()
         {
-            ball = PhotonNetwork.Instantiate("Ball", respawnPoint.transform.position, Quaternion.identity, 0);
+            ball = PhotonNetwork.Instantiate("Ball", ballSpawnPos.transform.position, Quaternion.identity, 0);
             ball.GetComponent<PhotonView>().RPC("ShootBall", PhotonTargets.AllViaServer);
+
+            yield return new WaitForSeconds(5);
+
+            yield return stageManager.ChangeStage(1);
 
             while (!isEnteringGoal)
             {

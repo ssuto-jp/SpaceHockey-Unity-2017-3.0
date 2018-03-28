@@ -51,4 +51,5 @@ MonoBehaviour:
   - DisplayBattlePanel
   - ShootBall
   - ShowBattlePanel
+  - Alart
   DisableAutoOpenWizard: 1

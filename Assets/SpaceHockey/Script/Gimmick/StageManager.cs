@@ -1,28 +1,30 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace SpaceHockey.Gimmicks
 {
     [RequireComponent(typeof(MeteorGenerator))]
+    [RequireComponent(typeof(FogGenerator))]
     public class StageManager : MonoBehaviour
     {
         [SerializeField] private Image alartImage;
 
         private MeteorGenerator meteorGenerator;
+        private FogGenerator fogGenerator;
         private PhotonView photonView;
 
         private void Awake()
         {
             meteorGenerator = GetComponent<MeteorGenerator>();
+            fogGenerator = GetComponent<FogGenerator>();
             photonView = GetComponent<PhotonView>();
         }
 
         public void ResetStage()
         {
             meteorGenerator.enabled = false;
+            fogGenerator.enabled = false;
         }
 
         public IEnumerator ChangeStage(int i)
@@ -39,7 +41,7 @@ namespace SpaceHockey.Gimmicks
                     break;
                 case 2:
                     Debug.Log("2");
-                    //
+                    fogGenerator.enabled = true;
                     break;
                 case 3:
                     Debug.Log("3");

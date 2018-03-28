@@ -98,7 +98,7 @@ namespace SpaceHockey.GameManagers
 
             yield return new WaitForSeconds(5);
 
-            yield return stageManager.ChangeStage(1);
+            yield return stageManager.ChangeStage(2);
 
             while (!isEnteringGoal)
             {

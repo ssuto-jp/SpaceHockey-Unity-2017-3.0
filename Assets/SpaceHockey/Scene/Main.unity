@@ -1137,6 +1137,34 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 726954842}
+--- !u!1 &734743739
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 734743740}
+  m_Layer: 0
+  m_Name: FogSpawnPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &734743740
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 734743739}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1458490872}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &737373863
 GameObject:
   m_ObjectHideFlags: 0
@@ -1983,6 +2011,7 @@ Transform:
   m_Children:
   - {fileID: 1237903838}
   - {fileID: 592371455}
+  - {fileID: 734743740}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2487,6 +2516,7 @@ GameObject:
   - component: {fileID: 1992306193}
   - component: {fileID: 1992306194}
   - component: {fileID: 1992306192}
+  - component: {fileID: 1992306196}
   - component: {fileID: 1992306195}
   m_Layer: 0
   m_Name: StageManager
@@ -2564,6 +2594,18 @@ MonoBehaviour:
   instantiationId: 3
   currentMasterID: -1
   isRuntimeInstantiated: 0
+--- !u!114 &1992306196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1992306191}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67595af354cd703429860556ffd9d279, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fogSpawnPos: {fileID: 734743740}
 --- !u!1 &2013045166
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,18 +6,21 @@ namespace SpaceHockey.Gimmicks
 {
     [RequireComponent(typeof(MeteorGenerator))]
     [RequireComponent(typeof(FogGenerator))]
+    [RequireComponent(typeof(TornadoGenerator))]
     public class StageManager : MonoBehaviour
     {
         [SerializeField] private Image alartImage;
 
         private MeteorGenerator meteorGenerator;
         private FogGenerator fogGenerator;
+        private TornadoGenerator tornadoGenerator;
         private PhotonView photonView;
 
         private void Awake()
         {
             meteorGenerator = GetComponent<MeteorGenerator>();
             fogGenerator = GetComponent<FogGenerator>();
+            tornadoGenerator = GetComponent<TornadoGenerator>();
             photonView = GetComponent<PhotonView>();
         }
 
@@ -25,6 +28,7 @@ namespace SpaceHockey.Gimmicks
         {
             meteorGenerator.enabled = false;
             fogGenerator.enabled = false;
+            tornadoGenerator.enabled = false;
         }
 
         public IEnumerator ChangeStage(int i)
@@ -35,17 +39,17 @@ namespace SpaceHockey.Gimmicks
 
             switch (i)
             {
+                case 0:
+                    Debug.Log("0");
+                    meteorGenerator.enabled = true;
+                    break;
                 case 1:
                     Debug.Log("1");
-                    meteorGenerator.enabled = true;
+                    fogGenerator.enabled = true;
                     break;
                 case 2:
                     Debug.Log("2");
-                    fogGenerator.enabled = true;
-                    break;
-                case 3:
-                    Debug.Log("3");
-                    //
+                    tornadoGenerator.enabled = true;
                     break;
                 default:
                     break;

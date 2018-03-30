@@ -4,20 +4,21 @@ using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace SpaceHockey.GameManagers
 {
     public class ReadyManager : MonoBehaviour
     {
-        private PhotonView photon;
+        private PhotonView photonView;
         [SerializeField] private GameObject readyPanel;
         [SerializeField] private Text loadText;
         [SerializeField] private Text connectText;
         [SerializeField] private Text idText;
 
-        private void Start()
+        private void Awake()
         {
-            photon = GetComponent<PhotonView>();
+            photonView = GetComponent<PhotonView>();
         }
 
         public void ConnectNetwork()
@@ -30,7 +31,7 @@ namespace SpaceHockey.GameManagers
             this.OnPhotonRandomJoinFailedAsObservable()
                 .Subscribe(_ =>
                 {
-                    RoomOptions roomOptions = new RoomOptions()
+                    var roomOptions = new RoomOptions()
                     {
                         MaxPlayers = 2,
                         IsOpen = true,
@@ -48,13 +49,21 @@ namespace SpaceHockey.GameManagers
                     Debug.Log("ルームに入室しました。");
                 });
 
+            this.OnPhotonPlayerDisconnectedAsObservable()
+                .Subscribe(_ =>
+                {
+                    PhotonNetwork.Disconnect();
+                    SceneManager.LoadScene("Title");
+                    Debug.Log("通信が切断されました。");
+                });
+
             this.UpdateAsObservable()
                  .Subscribe(_ => connectText.text = PhotonNetwork.connectionStateDetailed.ToString());
         }
 
         public void OnFinishedLoading()
         {
-            photon.RPC("HiddenReadyPanel", PhotonTargets.All);
+            photonView.RPC("HiddenReadyPanel", PhotonTargets.All);
         }
 
         [PunRPC]

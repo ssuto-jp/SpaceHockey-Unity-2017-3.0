@@ -9,7 +9,7 @@ namespace SpaceHockey.GameManagers
 {
     public class ResultManager : MonoBehaviour
     {
-        private PhotonView photon;
+        private PhotonView photonView;
         private BattleManager battleManager;
         private bool isDisplay = false;
         [SerializeField] private GameObject resultPanel;
@@ -18,7 +18,7 @@ namespace SpaceHockey.GameManagers
 
         private void Start()
         {
-            photon = GetComponent<PhotonView>();
+            photonView = GetComponent<PhotonView>();
             battleManager = GetComponent<BattleManager>();
 
             this.UpdateAsObservable()
@@ -26,13 +26,16 @@ namespace SpaceHockey.GameManagers
                 {
                     if (isDisplay == true)
                     {
-                        photon.RPC("DisplayResult", PhotonTargets.AllViaServer);
+                        photonView.RPC("DisplayResult", PhotonTargets.AllViaServer);
                     }
                 });
 
             titleButton.OnClickAsObservable()
                 .First()
-                .Subscribe(_ => SceneManager.LoadScene("Title"));
+                .Subscribe(_ =>
+                {
+                    photonView.RPC("LoadTitleScene", PhotonTargets.AllViaServer);
+                });
         }
 
         public void StartResult()
@@ -61,6 +64,13 @@ namespace SpaceHockey.GameManagers
                 resultText.text = "LOSE";
                 resultText.color = Color.blue;
             }
+        }
+
+        [PunRPC]
+        private void LoadTitleScene()
+        {
+            PhotonNetwork.Disconnect();
+            SceneManager.LoadScene("Title");
         }
     }
 }

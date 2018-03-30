@@ -52,4 +52,6 @@ MonoBehaviour:
   - ShootBall
   - ShowBattlePanel
   - Alart
+  - DisconnectNetwork
+  - LoadTitleScene
   DisableAutoOpenWizard: 1

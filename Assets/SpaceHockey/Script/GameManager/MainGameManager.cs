@@ -7,7 +7,7 @@ namespace SpaceHockey.GameManagers
     [RequireComponent(typeof(ReadyManager))]
     [RequireComponent(typeof(BattleManager))]
     [RequireComponent(typeof(ResultManager))]
-    public class MainGameManager : Photon.MonoBehaviour, IGameStateProvider
+    public class MainGameManager : MonoBehaviour, IGameStateProvider
     {
         private ReadyManager readyManager;
         private BattleManager battleManager;
@@ -29,7 +29,7 @@ namespace SpaceHockey.GameManagers
                 .Subscribe(state => OnStateChanged(state));
         }
 
-        void OnStateChanged(GameState gameState)
+        private void OnStateChanged(GameState gameState)
         {
             switch (gameState)
             {

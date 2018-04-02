@@ -3,7 +3,7 @@ using SpaceHockey.Gimmicks;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 namespace SpaceHockey.GameManagers
 {
@@ -13,7 +13,7 @@ namespace SpaceHockey.GameManagers
         [SerializeField] private GameObject[] goal = new GameObject[2];
         [SerializeField] private Transform ballSpawnPos;
         [SerializeField] private GameObject battlePanel;
-        [SerializeField] private Text scoreText;
+        [SerializeField] private TextMeshProUGUI scoreText;
 
         private StageManager stageManager;
         private GameObject ball;

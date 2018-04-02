@@ -3,6 +3,7 @@ using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using UnityEngine.SceneManagement;
 
 namespace SpaceHockey.GameManagers
@@ -13,8 +14,8 @@ namespace SpaceHockey.GameManagers
         private BattleManager battleManager;
         private bool isDisplay = false;
         [SerializeField] private GameObject resultPanel;
-        [SerializeField] private Text resultText;
         [SerializeField] private Button titleButton;
+        [SerializeField] private TextMeshProUGUI resultText;
 
         private void Start()
         {
@@ -52,17 +53,20 @@ namespace SpaceHockey.GameManagers
             if (battleManager._score[0].Value == battleManager.MaxScore && PlayerId.Instance.Player_Id == 1)
             {
                 resultText.text = "WIN";
-                resultText.color = Color.red;
+                //resultText.color = Color.red;
+                resultText.faceColor = Color.red;
             }
             else if (battleManager._score[1].Value == battleManager.MaxScore && PlayerId.Instance.Player_Id == 2)
             {
                 resultText.text = "WIN";
-                resultText.color = Color.red;
+                //resultText.color = Color.red;
+                resultText.faceColor = Color.red;
             }
             else
             {
                 resultText.text = "LOSE";
-                resultText.color = Color.blue;
+                //resultText.color = Color.blue;
+                resultText.faceColor = Color.blue;
             }
         }
 

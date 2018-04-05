@@ -9,7 +9,7 @@ namespace SpaceHockey.Gimmicks
 
         private void OnEnable()
         {
-            fogParticle = PhotonNetwork.Instantiate("Fog", fogSpawnPos.transform.position, Quaternion.identity, 0);
+            fogParticle = PhotonNetwork.Instantiate("Fog", fogSpawnPos.transform.position, fogSpawnPos.transform.rotation, 0);
         }
 
         private void OnDisable()

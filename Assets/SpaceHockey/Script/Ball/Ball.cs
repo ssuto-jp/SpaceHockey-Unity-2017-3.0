@@ -9,8 +9,8 @@ namespace SpaceHockey.Balls
     public class Ball : MonoBehaviour
     {      
         private Rigidbody rb;
-        private float initialSpeed = 10f;
-        private float accele = 40f;
+        [SerializeField] private float initialSpeed;
+        [SerializeField] private float accele;
 
         private void Awake()
         {            

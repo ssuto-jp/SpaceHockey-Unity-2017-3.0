@@ -19,7 +19,7 @@ namespace SpaceHockey.GameManagers
         private GameObject ball;
         private bool isEnteringGoal;
 
-        public int MaxScore { get; } = 1;
+        public int MaxScore { get; } = 10;
         public IntReactiveProperty[] _score = new IntReactiveProperty[2];
 
         private BoolReactiveProperty _isWinner = new BoolReactiveProperty(false);
@@ -98,7 +98,7 @@ namespace SpaceHockey.GameManagers
 
             yield return new WaitForSeconds(5);
 
-            yield return stageManager.ChangeStage(2);
+            yield return stageManager.ChangeStage(0);
 
             while (!isEnteringGoal)
             {

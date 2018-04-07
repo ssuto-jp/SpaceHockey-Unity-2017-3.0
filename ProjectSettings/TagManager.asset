@@ -9,6 +9,7 @@ TagManager:
   - Ground
   - Fire
   - Landing
+  - Goal
   layers:
   - Default
   - TransparentFX

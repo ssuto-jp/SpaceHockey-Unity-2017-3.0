@@ -24,8 +24,7 @@ namespace SpaceHockey.Gimmicks
         {
             while (isMeteor)
             {
-                var meteor = PhotonNetwork.Instantiate("Meteor", meteorSpawnPos.position, Quaternion.identity, 0);
-                //meteor.transform.position = Vector3.Lerp(meteorSpawnPos.position, meteorLandingPos[Random.Range(0, 5)].position, 0.8f);
+                var meteor = PhotonNetwork.Instantiate("Meteor", meteorSpawnPos.position, Quaternion.identity, 0);               
                 meteor.transform.position = meteorLandingPos[Random.Range(0, 5)].position;
 
                 yield return new WaitForSeconds(1);

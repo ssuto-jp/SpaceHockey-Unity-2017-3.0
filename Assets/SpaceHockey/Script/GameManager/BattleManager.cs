@@ -19,7 +19,7 @@ namespace SpaceHockey.GameManagers
         private GameObject ball;
         private bool isEnteringGoal;
 
-        public int MaxScore { get; } = 10;
+        public int MaxScore { get; } = 2;
         public IntReactiveProperty[] _score = new IntReactiveProperty[2];
 
         private BoolReactiveProperty _isWinner = new BoolReactiveProperty(false);
@@ -66,6 +66,7 @@ namespace SpaceHockey.GameManagers
                     if (score == MaxScore)
                     {
                         _isWinner.Value = true;
+                        stageManager.ResetStage();
                     }
                 });
         }
@@ -96,7 +97,7 @@ namespace SpaceHockey.GameManagers
             ball = PhotonNetwork.Instantiate("Ball", ballSpawnPos.transform.position, Quaternion.identity, 0);
             ball.GetComponent<PhotonView>().RPC("ShootBall", PhotonTargets.AllViaServer);
 
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(Random.Range(5, 10));
 
             yield return stageManager.ChangeStage(0);
 
@@ -106,12 +107,10 @@ namespace SpaceHockey.GameManagers
             }
         }
 
-
         private IEnumerator RoundEnding()
         {
             if (isEnteringGoal)
             {
-                PhotonNetwork.Destroy(ball);
                 isEnteringGoal = false;
             }
 

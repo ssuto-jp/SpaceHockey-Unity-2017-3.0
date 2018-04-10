@@ -10,10 +10,11 @@ namespace SpaceHockey.Gimmicks
     public class StageManager : MonoBehaviour
     {
         [SerializeField] private Image alartImage;
-
+        [SerializeField] private AudioClip alartAudio;
         private MeteorGenerator meteorGenerator;
         private FogGenerator fogGenerator;
         private TornadoGenerator tornadoGenerator;
+        private AudioSource audioSource;
         private PhotonView photonView;
 
         private void Awake()
@@ -21,6 +22,7 @@ namespace SpaceHockey.Gimmicks
             meteorGenerator = GetComponent<MeteorGenerator>();
             fogGenerator = GetComponent<FogGenerator>();
             tornadoGenerator = GetComponent<TornadoGenerator>();
+            audioSource = GetComponent<AudioSource>();
             photonView = GetComponent<PhotonView>();
         }
 
@@ -65,14 +67,15 @@ namespace SpaceHockey.Gimmicks
         private IEnumerator AlartCoroutine()
         {
             alartImage.enabled = true;
+            audioSource.PlayOneShot(alartAudio);
             var count = 0;
-            while (count < 7)
+            while (count < 9)
             {
                 ++count;
                 alartImage.enabled = !alartImage.enabled;
 
                 yield return new WaitForSeconds(0.3f);
-                if (count == 6)
+                if (count == 8)
                 {
                     alartImage.enabled = false;
                     break;

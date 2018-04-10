@@ -12,8 +12,8 @@ namespace SpaceHockey.Gimmicks
             {
                 explosionParticle.transform.parent = null;
 
-                Destroy(gameObject);
                 explosionParticle.SetActive(true);
+                Destroy(gameObject);
                 Destroy(explosionParticle, 1f);
             }
         }

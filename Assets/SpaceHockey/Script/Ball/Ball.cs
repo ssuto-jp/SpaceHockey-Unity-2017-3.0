@@ -15,11 +15,15 @@ namespace SpaceHockey.Balls
         [SerializeField] private float accele;
         [SerializeField] private GameObject generationParticle;
         [SerializeField] private GameObject extinctionParticle;
+        [SerializeField] private AudioClip collisionAudio;
+        [SerializeField] private AudioClip generationAudio;
         private Rigidbody rb;
+        private AudioSource audioSource;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
+            audioSource = GetComponent<AudioSource>();
         }
 
         private void Start()
@@ -28,6 +32,7 @@ namespace SpaceHockey.Balls
                 .Subscribe(collision =>
                 {
                     rb.velocity = rb.velocity.normalized * accele;
+                    audioSource.PlayOneShot(collisionAudio);
                 });
 
             this.OnTriggerEnterAsObservable()
@@ -51,6 +56,7 @@ namespace SpaceHockey.Balls
         private IEnumerator ShootBallCoroutine()
         {
             generationParticle.SetActive(true);
+            audioSource.PlayOneShot(generationAudio);
 
             yield return new WaitForSeconds(2);
 

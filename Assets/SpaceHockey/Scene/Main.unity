@@ -1027,6 +1027,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 45
       objectReference: {fileID: 0}
+    - target: {fileID: 20790582151244810, guid: 845257f5c9a69a34bb3e38789aa13180,
+        type: 2}
+      propertyPath: m_ClearFlags
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 845257f5c9a69a34bb3e38789aa13180, type: 2}
   m_IsPrefabParent: 0
@@ -2758,6 +2763,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alartImage: {fileID: 1311547008}
   alartAudio: {fileID: 8300000, guid: d9397c85353083b4b90e419050d1f4ad, type: 3}
+  stageLight: {fileID: 49301559}
 --- !u!114 &1992306195
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -14,12 +14,10 @@ namespace SpaceHockey.GameManagers
         [SerializeField] private Transform ballSpawnPos;
         [SerializeField] private GameObject battlePanel;
         [SerializeField] private TextMeshProUGUI scoreText;
-
         private StageManager stageManager;
         private GameObject ball;
         private bool isEnteringGoal;
-
-        public int MaxScore { get; } = 10;
+        public int MaxScore { get; } = 3;
         public IntReactiveProperty[] _score = new IntReactiveProperty[2];
 
         private BoolReactiveProperty _isWinner = new BoolReactiveProperty(false);
@@ -66,7 +64,6 @@ namespace SpaceHockey.GameManagers
                     if (score == MaxScore)
                     {
                         _isWinner.Value = true;
-                        stageManager.ResetStage();
                     }
                 });
         }
@@ -74,8 +71,6 @@ namespace SpaceHockey.GameManagers
         public IEnumerator BattleCoroutine()
         {
             yield return StartCoroutine(RoundStarting());
-
-            yield return StartCoroutine(RoundPlaying());
 
             yield return StartCoroutine(RoundEnding());
 
@@ -87,19 +82,17 @@ namespace SpaceHockey.GameManagers
 
         private IEnumerator RoundStarting()
         {
-            stageManager.ResetStage();
+            yield return new WaitForSeconds(1);
 
-            yield return new WaitForSeconds(2);
-        }
-
-        private IEnumerator RoundPlaying()
-        {
             ball = PhotonNetwork.Instantiate("Ball", ballSpawnPos.transform.position, Quaternion.identity, 0);
             ball.GetComponent<PhotonView>().RPC("ShootBall", PhotonTargets.AllViaServer);
 
             yield return new WaitForSeconds(Random.Range(5, 10));
 
-            yield return stageManager.ChangeStage(0);
+            if (!isEnteringGoal)
+            {
+               yield return stageManager.ChangeStage(Random.Range(0, 3));               
+            }
 
             while (!isEnteringGoal)
             {
@@ -111,10 +104,11 @@ namespace SpaceHockey.GameManagers
         {
             if (isEnteringGoal)
             {
+                stageManager.ResetStage();
                 isEnteringGoal = false;
             }
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(2);
         }
 
         [PunRPC]

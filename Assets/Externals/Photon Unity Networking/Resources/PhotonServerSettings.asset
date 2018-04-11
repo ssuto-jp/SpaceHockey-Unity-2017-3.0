@@ -54,4 +54,6 @@ MonoBehaviour:
   - Alart
   - DisconnectNetwork
   - LoadTitleScene
+  - DownBrightness
+  - UpBrightness
   DisableAutoOpenWizard: 1

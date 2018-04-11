@@ -11,6 +11,7 @@ namespace SpaceHockey.Gimmicks
     {
         [SerializeField] private Image alartImage;
         [SerializeField] private AudioClip alartAudio;
+        [SerializeField] private Light stageLight;
         private MeteorGenerator meteorGenerator;
         private FogGenerator fogGenerator;
         private TornadoGenerator tornadoGenerator;
@@ -31,6 +32,8 @@ namespace SpaceHockey.Gimmicks
             meteorGenerator.enabled = false;
             fogGenerator.enabled = false;
             tornadoGenerator.enabled = false;
+
+            photonView.RPC("UpBrightness", PhotonTargets.AllViaServer, null);
         }
 
         public IEnumerator ChangeStage(int i)
@@ -39,6 +42,7 @@ namespace SpaceHockey.Gimmicks
 
             yield return new WaitForSeconds(2);
 
+            photonView.RPC("DownBrightness", PhotonTargets.AllViaServer, null);
             switch (i)
             {
                 case 0:
@@ -56,6 +60,18 @@ namespace SpaceHockey.Gimmicks
                 default:
                     break;
             }
+        }
+
+        [PunRPC]
+        private void UpBrightness()
+        {
+            stageLight.intensity = 1f;
+        }
+
+        [PunRPC]
+        private void DownBrightness()
+        {
+            stageLight.intensity = 0.1f;
         }
 
         [PunRPC]

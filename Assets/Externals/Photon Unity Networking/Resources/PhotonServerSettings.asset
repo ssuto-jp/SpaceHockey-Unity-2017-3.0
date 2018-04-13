@@ -56,4 +56,5 @@ MonoBehaviour:
   - LoadTitleScene
   - DownBrightness
   - UpBrightness
+  - DestroyBall
   DisableAutoOpenWizard: 1

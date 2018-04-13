@@ -19,11 +19,13 @@ namespace SpaceHockey.Balls
         [SerializeField] private AudioClip generationAudio;
         private Rigidbody rb;
         private AudioSource audioSource;
+        private PhotonView photonView;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
             audioSource = GetComponent<AudioSource>();
+            photonView = GetComponent<PhotonView>();
         }
 
         private void Start()
@@ -39,12 +41,20 @@ namespace SpaceHockey.Balls
                 .Where(other => other.CompareTag("Goal"))
                 .Subscribe(_ =>
                 {
-                    extinctionParticle.transform.parent = null;
-
-                    Destroy(gameObject);
-                    extinctionParticle.SetActive(true);
-                    Destroy(extinctionParticle, 3f);
+                    if (photonView.isMine)
+                    {
+                        photonView.RPC("DestroyBall", PhotonTargets.All, null);
+                    }
                 });
+        }
+
+        [PunRPC]
+        private void DestroyBall()
+        {
+            extinctionParticle.transform.parent = null;
+            extinctionParticle.SetActive(true);
+            Destroy(gameObject);
+            Destroy(extinctionParticle, 3f);
         }
 
         [PunRPC]

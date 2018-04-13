@@ -7,7 +7,7 @@ namespace SpaceHockey.GameManagers
     [RequireComponent(typeof(ReadyManager))]
     [RequireComponent(typeof(BattleManager))]
     [RequireComponent(typeof(ResultManager))]
-    public class MainGameManager : MonoBehaviour, IGameStateProvider
+    public class MainGameManager : MonoBehaviour
     {
         private ReadyManager readyManager;
         private BattleManager battleManager;

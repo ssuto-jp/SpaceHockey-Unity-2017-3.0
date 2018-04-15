@@ -7,7 +7,6 @@ namespace SpaceHockey.Balls
 {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(PhotonView))]
-    [RequireComponent(typeof(PhotonTransformView))]
     [RequireComponent(typeof(PhotonRigidbodyView))]
     public class Ball : MonoBehaviour
     {

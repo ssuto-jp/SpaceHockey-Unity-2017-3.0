@@ -6,8 +6,8 @@ namespace SpaceHockey.Players
 {
     public class PlayerMover : BasePlayerComponent
     {
-        private const float racketSpeed = 0.3f;
-        private const float racketMaxPos = 8f;
+        private const float racketSpeed = 20f;      
+        private Rigidbody rb;
 
         public enum PlayerType
         {
@@ -15,35 +15,24 @@ namespace SpaceHockey.Players
         }
         public PlayerType type;
 
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody>();
+        }
+
         protected override void OnInitialize()
         {
             switch (PlayerId.Instance.Player_Id)
             {
                 case 1:
-                    this.UpdateAsObservable()
-                   .Where(_ => type == PlayerType.player1)
-                   .Where(_ => Input.GetKey(KeyCode.LeftArrow))
-                   .Where(_ => racketMaxPos > transform.position.x)
-                   .Subscribe(_ => transform.Translate(Vector3.right * racketSpeed));
-
-                    this.UpdateAsObservable()
+                    this.FixedUpdateAsObservable()
                         .Where(_ => type == PlayerType.player1)
-                        .Where(_ => Input.GetKey(KeyCode.RightArrow))
-                        .Where(_ => transform.position.x > -racketMaxPos)
-                        .Subscribe(_ => transform.Translate(Vector3.left * racketSpeed));
+                        .Subscribe(_ => rb.velocity = new Vector3(-Input.GetAxis("Horizontal"), 0, 0) * racketSpeed);
                     break;
                 case 2:
-                    this.UpdateAsObservable()
-                    .Where(_ => type == PlayerType.player2)
-                    .Where(_ => Input.GetKey(KeyCode.LeftArrow))
-                    .Where(_ => -racketMaxPos < transform.position.x)
-                    .Subscribe(_ => transform.Translate(Vector3.left * racketSpeed));
-
-                    this.UpdateAsObservable()
+                    this.FixedUpdateAsObservable()
                         .Where(_ => type == PlayerType.player2)
-                        .Where(_ => Input.GetKey(KeyCode.RightArrow))
-                        .Where(_ => transform.position.x < racketMaxPos)
-                        .Subscribe(_ => transform.Translate(Vector3.right * racketSpeed));
+                        .Subscribe(_ => rb.velocity = new Vector3(Input.GetAxis("Horizontal"), 0, 0) * racketSpeed);
                     break;
                 default:
                     break;

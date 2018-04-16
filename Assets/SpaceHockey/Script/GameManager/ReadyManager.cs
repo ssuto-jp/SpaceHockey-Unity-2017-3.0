@@ -43,9 +43,8 @@ namespace SpaceHockey.GameManagers
 
             this.OnJoinedRoomAsObservable()
                 .Subscribe(_ =>
-                {
-                    PlayerId.Instance.InitializePlayer();
-                    idText.text = PlayerId.Instance.Player_Id.ToString() + "P";
+                {                   
+                    idText.text = PhotonNetwork.player.ID.ToString() + "P";                   
                     Debug.Log("ルームに入室しました。");
                 });
 

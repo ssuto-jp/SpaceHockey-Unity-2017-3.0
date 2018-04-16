@@ -62,8 +62,7 @@ namespace SpaceHockey.GameManagers
 
         private void OnBattle()
         {
-            StartCoroutine(battleManager.BattleCoroutine());
-            GetComponent<PhotonView>().RPC("DisplayBattlePanel", PhotonTargets.AllViaServer);
+            battleManager.StartBattle();
             battleManager.IsWinner
                 .SkipWhile(b => b != true)
                 .DistinctUntilChanged()

@@ -57,4 +57,5 @@ MonoBehaviour:
   - DownBrightness
   - UpBrightness
   - DestroyBall
+  - InitializePlayer
   DisableAutoOpenWizard: 1

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using SpaceHockey.Players;
 using SpaceHockey.Gimmicks;
 using UniRx;
 using UniRx.Triggers;
@@ -15,6 +16,7 @@ namespace SpaceHockey.GameManagers
         [SerializeField] private GameObject battlePanel;
         [SerializeField] private TextMeshProUGUI scoreText;
         private StageManager stageManager;
+        private PhotonView photonView;
         private GameObject ball;
         private bool isEnteringGoal;
         public int MaxScore { get; } = 6;
@@ -28,6 +30,8 @@ namespace SpaceHockey.GameManagers
 
         private void Awake()
         {
+            photonView = GetComponent<PhotonView>();
+
             for (var i = 0; i < 2; i++)
             {
                 _score[i] = new IntReactiveProperty(0);
@@ -68,6 +72,15 @@ namespace SpaceHockey.GameManagers
                 });
         }
 
+        public void StartBattle()
+        {
+            //プレイヤーを初期化
+            PlayerId.Instance.GetComponent<PhotonView>().RPC("InitializePlayer", PhotonTargets.AllViaServer, null);
+
+            photonView.RPC("DisplayBattlePanel", PhotonTargets.AllViaServer, null);
+            StartCoroutine(BattleCoroutine());
+        }
+
         public IEnumerator BattleCoroutine()
         {
             yield return StartCoroutine(RoundStarting());
@@ -91,7 +104,7 @@ namespace SpaceHockey.GameManagers
 
             if (!isEnteringGoal)
             {
-               yield return stageManager.ChangeStage(Random.Range(0, 3));               
+                yield return stageManager.ChangeStage(Random.Range(0, 3));
             }
 
             while (!isEnteringGoal)

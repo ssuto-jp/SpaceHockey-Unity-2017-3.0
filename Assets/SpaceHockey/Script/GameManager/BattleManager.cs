@@ -42,24 +42,6 @@ namespace SpaceHockey.GameManagers
         {
             stageManager = stageObject.GetComponent<StageManager>();
 
-            //ゴールに入ったら得点を増やす
-            this.goal[0].OnTriggerEnterAsObservable()
-                .Where(other => other.tag == "Ball")
-                .Subscribe(other =>
-                {
-                    isEnteringGoal = true;
-                    ++_score[1].Value;
-                });
-
-            this.goal[1].OnTriggerEnterAsObservable()
-                .Where(other => other.tag == "Ball")
-                .Subscribe(other =>
-                {
-                    isEnteringGoal = true;
-                    ++_score[0].Value;
-                });
-
-            //得点を表示
             _score[0].Merge(_score[1])
                 .TakeWhile(score => score <= MaxScore)
                 .Subscribe(score =>
@@ -74,10 +56,9 @@ namespace SpaceHockey.GameManagers
 
         public void StartBattle()
         {
-            //プレイヤーを初期化
             PlayerId.Instance.GetComponent<PhotonView>().RPC("InitializePlayer", PhotonTargets.AllViaServer, null);
-
             photonView.RPC("DisplayBattlePanel", PhotonTargets.AllViaServer, null);
+            SetGoalCollider();
             StartCoroutine(BattleCoroutine());
         }
 
@@ -128,6 +109,25 @@ namespace SpaceHockey.GameManagers
         public void DisplayBattlePanel()
         {
             battlePanel.SetActive(true);
+        }
+
+        private void SetGoalCollider()
+        {
+            this.goal[0].OnTriggerEnterAsObservable()
+                .Where(other => other.tag == "Ball")
+                .Subscribe(other =>
+                {
+                    isEnteringGoal = true;
+                    ++_score[1].Value;
+                });
+
+            this.goal[1].OnTriggerEnterAsObservable()
+                .Where(other => other.tag == "Ball")
+                .Subscribe(other =>
+                {
+                    isEnteringGoal = true;
+                    ++_score[0].Value;
+                });
         }
 
         private void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

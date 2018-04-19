@@ -58,4 +58,10 @@ MonoBehaviour:
   - UpBrightness
   - DestroyBall
   - InitializePlayer
+  - ColorRpc
+  - DoJump
+  - Flash
+  - Marco
+  - Polo
+  - TaggedPlayer
   DisableAutoOpenWizard: 1

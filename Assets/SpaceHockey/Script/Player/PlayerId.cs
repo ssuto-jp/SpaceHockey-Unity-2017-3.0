@@ -6,7 +6,6 @@ namespace SpaceHockey.Players
 {
     public class PlayerId : MonoBehaviour
     {
-        private PhotonView photonView;
         public static PlayerId Instance;
         public int Player_Id { get; private set; }
 
@@ -15,7 +14,6 @@ namespace SpaceHockey.Players
 
         private void Awake()
         {
-            photonView = GetComponent<PhotonView>();
             Instance = this;
         }
 

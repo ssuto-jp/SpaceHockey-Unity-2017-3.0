@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using SpaceHockey.Players;
 using SpaceHockey.Gimmicks;
 using UniRx;
 using UniRx.Triggers;
@@ -56,7 +55,7 @@ namespace SpaceHockey.GameManagers
 
         public void StartBattle()
         {
-            PlayerId.Instance.GetComponent<PhotonView>().RPC("InitializePlayer", PhotonTargets.AllViaServer, null);
+            photonView.RPC("InitializePlayer", PhotonTargets.AllViaServer, null);
             photonView.RPC("DisplayBattlePanel", PhotonTargets.AllViaServer, null);
             SetGoalCollider();
             StartCoroutine(BattleCoroutine());

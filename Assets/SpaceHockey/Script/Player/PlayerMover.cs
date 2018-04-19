@@ -6,7 +6,7 @@ namespace SpaceHockey.Players
 {
     public class PlayerMover : BasePlayerComponent
     {
-        private const float racketSpeed = 20f;      
+        private const float racketSpeed = 12f;      
         private Rigidbody rb;
 
         public enum PlayerType
